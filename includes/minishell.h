@@ -10,14 +10,6 @@
 #include <sys/stat.h>
 # include <limits.h>
 # include <sys/wait.h>
-# define CD_ERNOPWD(p, e) ({ft_printf(NOPWD, p); return (e);})
-# define CD_ERNOTEXIST(p, e) ({ft_printf(NOTEXIST, p); return (e);})
-# define CD_ERNOTDIR(p, e) ({ft_printf(NOTDIR, p); return (e);})
-# define CD_ERPERM(p, e) ({ft_printf(NOPERM, p); return (e);})
-# define NOTEXIST "cd: no such file or directory: %s\n"
-# define NOTDIR "cd: not a directory: %s\n"
-# define NOPERM "cd: permission denied: %s\n"
-# define NOPWD "cd: string not in pwd: %s\n"
 
 
 int g_len;
