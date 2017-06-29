@@ -69,7 +69,7 @@ int ft_checkarg(char **arg)
 
 void ft_echoenv(char *arg, char **envar)
 {
-		int value;
+		int value = 0;
 
 		value = ft_compare(envar, arg);
 		if (value != -1)
@@ -78,22 +78,23 @@ void ft_echoenv(char *arg, char **envar)
 			ft_printf("%s: Undefined variable.\n", arg);
 }
 
-void ft_parse_echo(char **arg, char **envar)
+char **ft_parse_echo(char **arg, char **envar)
 {
 	int i;
 	int flag;
-	char *sign;
+	char *sign = NULL;
+	int k;
 
 	i = 1;
-	int k = 0;
 	flag = 1;
 	while (arg[i])
 	{
+		k = 0;
 		while (arg[i][k])
 		{
-			if (arg[i][k] == '$')
+			if (arg[i][k] == '$' || (arg[i][k] == '"' && arg[i][k + 1] == '$'))
 			{
-				sign = ft_strsub(arg[i], 1, ft_strlen(arg[i]));
+				((arg[i][k] == '$') ? (sign = ft_strsub(arg[i], 1, ft_strlen(arg[i]))) : (sign = ft_strsub(arg[i], 2, ft_strlen(arg[i]) - 3)));
 				ft_echoenv(sign, envar);
 				flag = 0;
 				break;
@@ -103,10 +104,9 @@ void ft_parse_echo(char **arg, char **envar)
 			ft_putchar(arg[i][k]);
 			k++;
 		}
-		// flag ? ft_putchar(' ') : (0);
-		// flag ? ft_putstr(arg[i]) : (0);
+		flag ? ft_putchar(' ') : (0);
 		i++;
 	}
-	ft_putchar('\n');
-	// flag ? ft_putchar('\n') : (0);
+	flag ? ft_putchar('\n') : (0);
+	return (envar);
 }

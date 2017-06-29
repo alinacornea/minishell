@@ -44,7 +44,7 @@ char  **ft_execute(char **arg, char **envar)
 	else if(ft_getbuiltin(arg) == 1)
  		envar = ft_cd(arg, envar);
 	else if (ft_getbuiltin(arg) == 2)
-		ft_parse_echo(arg, envar);
+		envar = ft_parse_echo(arg, envar);
 	else
 		ft_forkexe(arg, envar);
 	return (envar);

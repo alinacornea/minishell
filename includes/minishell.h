@@ -34,7 +34,7 @@ char *get_param(char *str);
 char **ft_setsenv(char **envar, char *arg1, char *arg2);
 char		**ft_unsetenv(char **envar, char *param);
 int ft_compare(char **envar, char *path);
-void ft_parse_echo(char **arg, char **envar);
+char **ft_parse_echo(char **arg, char **envar);
 void free_tab(char **tab);
 void free_envar(char **envar);
 int find_arg(char **envar, char *str);
