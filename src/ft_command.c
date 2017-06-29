@@ -99,7 +99,7 @@ char **ft_parse_echo(char **arg, char **envar)
 				flag = 0;
 				break;
 			}
-			else if (arg[i][k] == '"' || arg[i][k] == '\'')
+			else if (arg[i][k] == '"' || arg[i][k] == '\\')
 				k++;
 			ft_putchar(arg[i][k]);
 			k++;
