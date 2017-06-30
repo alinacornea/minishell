@@ -2,7 +2,7 @@
 
 void free_tab(char **tab)
 {
-	int i = -1;
+	int i = 0;
 
 	while(tab[i])
 	{
@@ -14,7 +14,7 @@ void free_tab(char **tab)
 
 void free_envar(char **envar)
 {
-	int i = 0;
+	int i = -1;
 
 	while(envar[i])
 	{
@@ -23,26 +23,32 @@ void free_envar(char **envar)
 	}
 }
 
-void ft_echoenv(char *arg, char **envar)
+int ft_echoenv(char **arg, char **envar, int i)
 {
-		int value = 0;
+		int value;
+		char *sign;
 
-		value = ft_compare(envar, arg);
+		sign = NULL;
+		if (arg[i][0] == '$')
+			sign = ft_strsub(arg[i], 1, ft_strlen(arg[i]));
+		else
+			sign = ft_strsub(arg[i], 2, ft_strlen(arg[i]) - 3);
+		value = ft_compare(envar, sign);
 		if (value != -1)
 			ft_printf("%s\n", get_param(envar[value]));
 		else
-			ft_printf("%s: Undefined variable.\n", arg);
+			ft_printf("%s: Undefined variable.\n", sign);
+		sign ? ft_strdel(&sign) : (0);
+		return (0);
 }
 
 char **ft_parse_echo(char **arg, char **envar)
 {
 	int i;
-	int flag;
-	char *sign = NULL;
+	int f;
 	int k;
 
 	i = 1;
-	flag = 1;
 	while (arg[i])
 	{
 		k = 0;
@@ -50,9 +56,7 @@ char **ft_parse_echo(char **arg, char **envar)
 		{
 			if (arg[i][k] == '$' || (arg[i][k] == '"' && arg[i][k + 1] == '$'))
 			{
-				((arg[i][k] == '$') ? (sign = ft_strsub(arg[i], 1, ft_strlen(arg[i]))) : (sign = ft_strsub(arg[i], 2, ft_strlen(arg[i]) - 3)));
-				ft_echoenv(sign, envar);
-				flag = 0;
+				f = ft_echoenv(arg, envar, i);
 				break;
 			}
 			else if (arg[i][k] == '"' || arg[i][k] == '\\')
@@ -60,9 +64,9 @@ char **ft_parse_echo(char **arg, char **envar)
 			ft_putchar(arg[i][k]);
 			k++;
 		}
-		flag ? ft_putchar(' ') : (0);
+		f ? ft_putchar(' ') : (0);
 		i++;
 	}
-	flag ? ft_putchar('\n') : (0);
+	f ? ft_putchar('\n') : (0);
 	return (envar);
 }

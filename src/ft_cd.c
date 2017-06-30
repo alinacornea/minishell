@@ -1,5 +1,21 @@
 #include "minishell.h"
 
+char	*ft_strjoincl(char *s1, char *s2, int free_both)
+{
+	char	*new;
+
+	if (!(new = ft_strjoin(s1, s2)))
+		return (NULL);
+	free(s1);
+	s1 = NULL;
+	if (free_both)
+	{
+		free(s2);
+		s2 = NULL;
+	}
+	return (new);
+}
+
 char *ft_setnew(char *str, char **arg)
 {
 	char *tmp;
@@ -19,7 +35,7 @@ char *ft_setnew(char *str, char **arg)
 		i++;
 	}
 	str = ft_strjoin(str, tmp);
-	free(tmp);
+	tmp ? free(tmp) : (0);
 	return (str);
 }
 
@@ -58,8 +74,6 @@ char **ft_home(char *tmp, char **arg, char **envar)
 	int pwd;
 	char *new;
 
-	if (!(new = (char *)malloc(sizeof(char) * ft_strlen(envar[find_arg(envar, "HOME")]) - 5)))
-		return (NULL);
 	new = get_param(envar[find_arg(envar, "HOME")]);
 	if (ft_strlen (arg[1]) > 1)
 		new = ft_setnew(new, arg);
@@ -70,7 +84,7 @@ char **ft_home(char *tmp, char **arg, char **envar)
 		envar[find_arg(envar, "OLDPWD")] = ft_strjoin("OLDPWD=",get_param(envar[pwd]));
 		envar[pwd] = ft_strjoin("PWD=", getcwd(tmp, 2048));
 	}
-	ft_strdel(&new);
+	new ? ft_strdel(&new) : (0);
 	return (envar);
 }
 
@@ -80,10 +94,7 @@ char	**ft_homedir(char *tmp, char **envar)
 	char *new;
 	char *param;
 
-	new = (char*)malloc(sizeof(char) * ft_strlen(envar[find_arg(envar, "HOME")]) - 5);
 	new = get_param(envar[find_arg(envar, "HOME")]);
-	if (new == NULL)
-		exit(0);
 	chdir(new);
 	pwd = find_arg(envar, "PWD");
 	if (pwd != -1)
@@ -93,15 +104,16 @@ char	**ft_homedir(char *tmp, char **envar)
 		envar[pwd] = ft_strjoin("PWD=", getcwd(tmp, 2048));
 		ft_strdel(&param);
 	}
-	ft_strdel(&new);
+	new ? ft_strdel(&new) : (0);
 	return (envar);
 }
 
 char **ft_cd(char **arg, char **envar)
 {
-	char	*tmp = NULL;
-	char	*tmp2 = NULL;
+	char	*tmp;
+	char	*tmp2;
 
+	tmp = NULL;
 	tmp2 = ft_strchr(envar[find_arg(envar, "PWD")], '=');
 	if (find_arg(envar, "HOME") == -1)
 		envar = ft_setsenv(envar, "HOME", getcwd(tmp, 2049));
@@ -117,6 +129,6 @@ char **ft_cd(char **arg, char **envar)
 	}
 	else if (access(arg[1], F_OK) == -1 && envar[0])
 		(ft_strcmp(arg[1], "-") == 0) ? ft_printlast(envar) : ft_printf("cd: no such file or directory: %s\n", arg[1]);
-	// free_tab(arg);
+	free_tab(arg);
 	return (envar);
 }

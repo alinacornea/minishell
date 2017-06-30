@@ -10,13 +10,12 @@
 # include <sys/stat.h>
 # include <limits.h>
 # include <sys/wait.h>
-<<<<<<< HEAD
 
 # define ARGS "setenv: Too many arguments."
 # define LETTER "setenv: Variable name must begin with a letter."
 # define ALPHA "setenv: Variable name must contain alphanumeric characters."
-=======
->>>>>>> 3e727e4d6c154d50557c679842619c2b2b9bc249
+# define NOT ": Command not found."
+#	define CL "\e[1;1H\e[2J"
 
 
 int g_len;
@@ -32,7 +31,6 @@ typedef	struct		s_exe
 
 char **ft_execute(char **arg, char **envar);
 char **ft_builtin(char **arg, char **envar);
-char	**ft_command(char **envar);
 char **ft_cd(char **arg, char **envar);
 char **ft_parse_echo(char **arg, char **envar);
 char **ft_setsenv(char **envar, char *arg1, char *arg2);
@@ -48,6 +46,6 @@ int	ft_strrlen(char **tab);
 int ft_checkarg(char **arg);
 void ft_gotodir(char *tmp, char **arg);
 void ft_printlast(char **envar);
-
+void ft_envdisplay(char **envar);
 
 #endif

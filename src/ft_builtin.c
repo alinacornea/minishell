@@ -32,11 +32,10 @@ char **ft_setsenv(char **envar, char *arg1, char *arg2)
 		ft_strdel(&arg1);
 		return (envar);
 	}
-
 	return (envar);
 }
 
-char	**ft_seteqenv(char **envar, char *arg1) //set equal
+char	**ft_seteqenv(char **envar, char *arg1)
 {
 	int i = 0;
 
@@ -63,18 +62,6 @@ char	**ft_seteqenv(char **envar, char *arg1) //set equal
 	return (envar);
 }
 
-void ft_envdisplay(char **envar)
-{
-	int i;
-
-	i = 0;
-	while (envar[i] && i < g_len)
-	{
-		printf("%s\n", envar[i]);
-		i++;
-	}
-}
-
 char  **ft_builtin(char **arg, char **envar)
 {
 	int j;
@@ -86,7 +73,7 @@ char  **ft_builtin(char **arg, char **envar)
 	}
 	if (ft_strcmp(arg[0], "env") == 0)
 		ft_envdisplay(envar);
-	if (ft_strcmp(arg[0], "unsetenv") == 0)
+	if (ft_strncmp(arg[0], "unsetenv", ft_strlen("unsetenv")) == 0)
 	{
 		j = 1;
 		if (ft_compare(envar, arg[j]) != -1)
@@ -96,6 +83,7 @@ char  **ft_builtin(char **arg, char **envar)
 				envar = ft_unsetenv(envar, arg[j]);
 				j++;
 			}
+			free_envar(envar);
 		}
 	}
 	return (envar);

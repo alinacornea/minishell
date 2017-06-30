@@ -47,7 +47,7 @@ void		*malloc(size_t sz)
 	addr_alloc = libc_malloc(sz);
 	if (addr_alloc)
 		g_alloc_count++;
-	fprintf(stderr, "malloc(%ld) = %p\n", sz, addr_alloc);
+	fprintf(stderr, "malloc(%ld) = %p\n",sz, addr_alloc);
 	return (addr_alloc);
 }
 

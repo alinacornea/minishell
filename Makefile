@@ -32,11 +32,11 @@ OBJ_NAME = $(SRC_NAME:.c=.o)
 SRC_NAME = main.c \
  			ft_cd.c \
 			ft_forkexe.c \
-			ft_command.c \
+			ft_echo.c \
 			ft_builtin.c \
 			ft_unbuiltin.c \
 			ft_utils.c \
-			leak.c
+			# leak.c
 
 all: $(NAME)
 

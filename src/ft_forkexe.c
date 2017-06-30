@@ -93,10 +93,10 @@ void ft_forkexe(char **arg, char **envar)
 				execve(exe.tmp, arg, envar);
 				exe.i++;
 			}
-			ft_printf("%s: Command not found.\n", arg[0]);
+			(ft_strcmp(arg[0], "clear") == 0) ? ft_printf("%s", CL) : ft_printf("%s%s\n", arg[0], NOT);
 		}
-		free_envar(exe.tab);
-		free_tab(arg);
 		exit(0);
 	}
+	free_tab(exe.tab);
+	free_tab(arg);
 }
