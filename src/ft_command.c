@@ -1,18 +1,8 @@
 #include "minishell.h"
 
-int ft_strrlen(char **tab)
-{
-	int i;
-
-	i = 0;
-	while (tab[i])
-		i++;
-	return (i);
-}
-
 void free_tab(char **tab)
 {
-	int i = 0;
+	int i = -1;
 
 	while(tab[i])
 	{
@@ -26,45 +16,11 @@ void free_envar(char **envar)
 {
 	int i = 0;
 
-	while(envar[i] && i < g_len)
+	while(envar[i])
 	{
 		envar[i] ? free(envar[i]) : (0);
 		i++;
 	}
-}
-
-int ft_checkarg(char **arg)
-{
-	int i;
-	int j;
-	int flag;
-
-	i = 0;
-	flag = 0;
-	while (arg[i])
-	{
-		if (ft_strrlen(arg) > 3)
-		{
-			ft_printf("setenv: Too many arguments.\n");
-			flag = 1;
-			break;
-		}
-		else if (ft_isdigit(arg[i][0]))
-			flag = 2;
-		j = 0;
-		while (arg[i][j])
-		{
-			if(!ft_isalnum(arg[i][j]))
-				flag = 3;
-			j++;
-		}
-		i++;
-	}
-	if (flag == 2 && ft_strrlen(arg) <= 3)
-		ft_printf("setenv: Variable name must begin with a letter.\n");
-	else if (flag == 3 && ft_strrlen(arg) <= 3)
-		ft_printf("setenv: Variable name must contain alphanumeric characters.\n");
-	return ((flag > 0) ? 0 : 1);
 }
 
 void ft_echoenv(char *arg, char **envar)

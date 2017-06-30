@@ -51,7 +51,6 @@ void ft_gotodir(char *tmp, char **arg)
 		new = ft_strdup("/");
 	chdir(new);
 	new ? ft_strdel(&new) : (0);
-	tmp ? ft_strdel(&tmp) : (0);
 }
 
 char **ft_home(char *tmp, char **arg, char **envar)
@@ -71,7 +70,7 @@ char **ft_home(char *tmp, char **arg, char **envar)
 		envar[find_arg(envar, "OLDPWD")] = ft_strjoin("OLDPWD=",get_param(envar[pwd]));
 		envar[pwd] = ft_strjoin("PWD=", getcwd(tmp, 2048));
 	}
-	free(new);
+	ft_strdel(&new);
 	return (envar);
 }
 
@@ -81,7 +80,7 @@ char	**ft_homedir(char *tmp, char **envar)
 	char *new;
 	char *param;
 
-	// new = (char*)malloc(sizeof(char) * ft_strlen(envar[find_arg(envar, "HOME")]) - 5);
+	new = (char*)malloc(sizeof(char) * ft_strlen(envar[find_arg(envar, "HOME")]) - 5);
 	new = get_param(envar[find_arg(envar, "HOME")]);
 	if (new == NULL)
 		exit(0);
@@ -117,10 +116,7 @@ char **ft_cd(char **arg, char **envar)
 		envar[find_arg(envar, "PWD")] = ft_strjoin("PWD=", getcwd(tmp, 2048));
 	}
 	else if (access(arg[1], F_OK) == -1 && envar[0])
-		ft_printf("cd: no such file or directory: %s\n", arg[1]);
-	free_tab(arg);
-	// ft_strdel(&envar[pwd]);
-	// ft_strdel(&envar[find_arg(envar, "OLDPWD")]);
-	// free_tab(envar);
+		(ft_strcmp(arg[1], "-") == 0) ? ft_printlast(envar) : ft_printf("cd: no such file or directory: %s\n", arg[1]);
+	// free_tab(arg);
 	return (envar);
 }

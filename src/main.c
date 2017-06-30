@@ -33,7 +33,7 @@ int ft_getbuiltin(char **arg)
 
 char  **ft_execute(char **arg, char **envar)
 {
-	if (arg && envar && ft_strcmp(arg[0], "exit") == 0)
+	if (ft_strcmp(arg[0], "exit") == 0)
 	{
 		free_tab(arg);
 		free(envar);
@@ -47,6 +47,7 @@ char  **ft_execute(char **arg, char **envar)
 		envar = ft_parse_echo(arg, envar);
 	else
 		ft_forkexe(arg, envar);
+	free_tab(arg);
 	return (envar);
 }
 

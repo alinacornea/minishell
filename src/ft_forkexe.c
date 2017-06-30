@@ -62,7 +62,7 @@ char **set_tab(char **envar)
 	int value;
 	char *param;
 
-	value = ft_compare(envar, "PATH");
+	value = ft_compare(envar, "PATH=");
 	param = get_param(envar[value]);
 	if (value == 1)
 		tab = ft_strsplit("/bin:/usr/bin", ':');
@@ -74,31 +74,29 @@ char **set_tab(char **envar)
 
 void ft_forkexe(char **arg, char **envar)
 {
-	int i;
-	int w;
-	char **tab;
-	char *tmp;
-	pid_t pid;
+	t_exe exe;
 
-	i = 0;
-	pid = fork();
-	tab = set_tab(envar);
-	if (pid > 0)
-		wait(&w);
-	if (pid == 0)
+	exe.i = 0;
+	exe.pid = 1;
+	exe.pid = fork();
+	exe.tab = set_tab(envar);
+	if (exe.pid > 0)
+		wait(&exe.w);
+	if (exe.pid == 0)
 	{
+		execve(arg[0], arg, envar);
 		if (ft_getbuiltin(arg) < 0)
 		{
-			while (tab[i])
+			while (exe.tab[exe.i])
 			{
-				tmp = get_path(arg[0], tab[i]);
-				execve(tmp, arg, envar);
-				i++;
+				exe.tmp = get_path(arg[0], exe.tab[exe.i]);
+				execve(exe.tmp, arg, envar);
+				exe.i++;
 			}
-			ft_putstr(arg[0]);
-			ft_putstr(": Command not found.\n");
+			ft_printf("%s: Command not found.\n", arg[0]);
 		}
+		free_envar(exe.tab);
+		free_tab(arg);
+		exit(0);
 	}
-	free_tab(tab);
-	free_tab(arg);
 }

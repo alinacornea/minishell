@@ -17,6 +17,7 @@ NAME= minishell
 CC= gcc -g
 
 CFLAGS+= -Wall -Wextra -Werror
+# -fsanitize=address
 
 SRC_PATH= src/
 INC_PATH= includes/
@@ -34,7 +35,8 @@ SRC_NAME = main.c \
 			ft_command.c \
 			ft_builtin.c \
 			ft_unbuiltin.c \
-			# leak.c
+			ft_utils.c \
+			leak.c
 
 all: $(NAME)
 
