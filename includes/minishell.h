@@ -10,10 +10,13 @@
 # include <sys/stat.h>
 # include <limits.h>
 # include <sys/wait.h>
+<<<<<<< HEAD
 
 # define ARGS "setenv: Too many arguments."
 # define LETTER "setenv: Variable name must begin with a letter."
 # define ALPHA "setenv: Variable name must contain alphanumeric characters."
+=======
+>>>>>>> 3e727e4d6c154d50557c679842619c2b2b9bc249
 
 
 int g_len;
