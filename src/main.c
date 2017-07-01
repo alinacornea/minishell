@@ -35,6 +35,7 @@ char  **ft_execute(char **arg, char **envar)
 {
 	if (ft_strcmp(arg[0], "exit") == 0)
 	{
+		ft_putstr("exit\n");
 		free_tab(arg);
 		free_tab(envar);
 		exit(0);
@@ -61,7 +62,7 @@ int	main(int argc, char **argv, char **env)
 		envar = ft_env(env);
 	while (1)
 	{
-			ft_putstr("<3 ");
+			ft_printf("\033[31m<3 \033[0m");
 			nb = read(0, line, 1024);
 			if (nb == 0)
 			{

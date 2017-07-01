@@ -70,6 +70,7 @@ char  **ft_builtin(char **arg, char **envar)
 	{
 		if (ft_checkarg(arg) != 0)
 			(arg[2]) ? (envar = ft_setsenv(envar, arg[1], arg[2])) : (envar = ft_seteqenv(envar, arg[1]));
+			free_tab(arg);
 	}
 	if (ft_strcmp(arg[0], "env") == 0)
 		ft_envdisplay(envar);
@@ -84,6 +85,7 @@ char  **ft_builtin(char **arg, char **envar)
 				j++;
 			}
 			free_envar(envar);
+			free(arg);
 		}
 	}
 	return (envar);

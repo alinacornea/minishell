@@ -1,21 +1,5 @@
 #include "minishell.h"
 
-char	*ft_strjoincl(char *s1, char *s2, int free_both)
-{
-	char	*new;
-
-	if (!(new = ft_strjoin(s1, s2)))
-		return (NULL);
-	free(s1);
-	s1 = NULL;
-	if (free_both)
-	{
-		free(s2);
-		s2 = NULL;
-	}
-	return (new);
-}
-
 char *ft_setnew(char *str, char **arg)
 {
 	char *tmp;
@@ -73,6 +57,7 @@ char **ft_home(char *tmp, char **arg, char **envar)
 {
 	int pwd;
 	char *new;
+	char *param;
 
 	new = get_param(envar[find_arg(envar, "HOME")]);
 	if (ft_strlen (arg[1]) > 1)
@@ -81,8 +66,10 @@ char **ft_home(char *tmp, char **arg, char **envar)
 	pwd = find_arg(envar, "PWD");
 	if (pwd != -1)
 	{
-		envar[find_arg(envar, "OLDPWD")] = ft_strjoin("OLDPWD=",get_param(envar[pwd]));
+		param = get_param(envar[pwd]);
+		envar[find_arg(envar, "OLDPWD")] = ft_strjoin("OLDPWD=", param);
 		envar[pwd] = ft_strjoin("PWD=", getcwd(tmp, 2048));
+		ft_strdel(&param);
 	}
 	new ? ft_strdel(&new) : (0);
 	return (envar);
@@ -102,7 +89,7 @@ char	**ft_homedir(char *tmp, char **envar)
 		param = get_param(envar[pwd]);
 		envar[find_arg(envar, "OLDPWD")] = ft_strjoin("OLDPWD=", param);
 		envar[pwd] = ft_strjoin("PWD=", getcwd(tmp, 2048));
-		ft_strdel(&param);
+		param ? ft_strdel(&param) : (0);
 	}
 	new ? ft_strdel(&new) : (0);
 	return (envar);
