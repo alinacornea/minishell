@@ -14,7 +14,7 @@ void free_tab(char **tab)
 
 void free_envar(char **envar)
 {
-	int i = -1;
+	int i = 0;
 
 	while(envar[i])
 	{

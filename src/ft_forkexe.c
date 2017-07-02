@@ -19,7 +19,7 @@ int ft_compare(char **envar, char *path)
 	i = 0;
 	while (envar[i] && path)
 	{
-		if (ft_strncmp(envar[i], path, ft_strlen(path)) == 0)
+		if (!ft_strncmp(envar[i], path, ft_strlen(path)))
 			return (i);
 		i++;
 	}
@@ -93,7 +93,7 @@ void ft_forkexe(char **arg, char **envar)
 				execve(exe.tmp, arg, envar);
 				exe.i++;
 			}
-			(ft_strcmp(arg[0], "clear") == 0) ? ft_printf("%s", CL) : ft_printf("%s%s\n", arg[0], NOT);
+			(!ft_strcmp(arg[0], "clear")) ? ft_printf("%s", CL) : ft_printf("%s%s\n", arg[0], NOT);
 		}
 		exit(0);
 	}

@@ -18,15 +18,15 @@ char	**ft_env(char **env)
 
 int ft_getbuiltin(char **arg)
 {
-	if (ft_strcmp(arg[0], "echo") == 0)
+	if (!ft_strcmp(arg[0], "echo"))
 		return (2);
-	else if (ft_strcmp(arg[0], "cd") == 0)
+	else if (!ft_strcmp(arg[0], "cd"))
 		return (1);
-	else if (ft_strcmp(arg[0], "env") == 0)
+	else if (!ft_strcmp(arg[0], "env"))
 		return (0);
-	else if (ft_strcmp(arg[0], "unsetenv") == 0)
+	else if (!ft_strcmp(arg[0], "unsetenv"))
 		return (0);
-	else if (ft_strcmp(arg[0], "setenv") == 0)
+	else if (!ft_strcmp(arg[0], "setenv"))
 		return (0);
 	return (-1);
 }
@@ -37,10 +37,10 @@ char  **ft_execute(char **arg, char **envar)
 	{
 		ft_putstr("exit\n");
 		free_tab(arg);
-		free_tab(envar);
+		envar ? free_tab(envar) : (0);
 		exit(0);
 	}
-	else if (ft_getbuiltin(arg) == 0)
+	else if (!ft_getbuiltin(arg))
 		envar = ft_builtin(arg, envar);
 	else if(ft_getbuiltin(arg) == 1)
  		envar = ft_cd(arg, envar);
@@ -74,6 +74,7 @@ int	main(int argc, char **argv, char **env)
 			g_len = ft_strrlen(envar);
 			if (arg[0] && env[0])
 				envar = ft_execute(arg, envar);
+			!arg[0] ? free(arg) : (0);
 	}
 	return (0);
 }
