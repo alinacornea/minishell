@@ -13,8 +13,10 @@ char		**ft_tabreallocless(char **envar, int j)
 	{
 		if (i == j)
 			i++;
-		if (envar[i] != NULL)
+		if (envar[i] != NULL){
 			tmp[k] = ft_strdup(envar[i]);
+			envar[i] ? free(envar[i]) : (0);
+		}
 		else
 			tmp[k] = NULL;
 		i++;

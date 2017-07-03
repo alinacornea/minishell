@@ -18,7 +18,7 @@ char *ft_setnew(char *str, char **arg)
 		j++;
 		i++;
 	}
-	str = ft_strjoin(str, tmp);
+	str = ft_strcat(str, tmp);
 	tmp ? free(tmp) : (0);
 	return (str);
 }

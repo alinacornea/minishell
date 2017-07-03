@@ -7,6 +7,7 @@ void free_tab(char **tab)
 	while(tab[i])
 	{
 		tab[i] ? free(tab[i]) : (0);
+		tab[i] = NULL;
 		i++;
 	}
 	tab ? free(tab) : (0);
@@ -14,8 +15,9 @@ void free_tab(char **tab)
 
 void free_envar(char **envar)
 {
-	int i = 0;
+	int i;
 
+	i = 0;
 	while(envar[i])
 	{
 		envar[i] ? free(envar[i]) : (0);

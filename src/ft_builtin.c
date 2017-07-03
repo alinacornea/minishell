@@ -1,29 +1,19 @@
 #include "minishell.h"
 
-void free_builtin(char **envar)
-{
-	int i = g_len;
-	while (envar[i])
-	{
-		envar[i] ? free(envar[i]) : (0);
-		i--;
-	}
-}
-
 char **ft_dup_builtin(char **envar)
 {
 	int		i;
 	char	**tmp;
 
 	i = 0;
-	if (!(tmp = (char **)malloc(sizeof(char *) * (ft_strrlen(envar) + 2))))
+	if (!(tmp = (char **)malloc(sizeof(char *) * (g_len + 2))))
 		return (NULL);
 	while (envar[i])
 	{
 		tmp[i] = ft_strdup(envar[i]);
 		i++;
 	}
-	envar ? free_builtin(envar) : (0);
+	envar ? free_tab(envar) : (0);
 	return (tmp);
 }
 
@@ -40,7 +30,8 @@ char **ft_setsenv(char **envar, char *arg1, char *arg2)
 		envar[i + 1] = ft_strdup(arg1);
 		envar[i + 1] = ft_strcat(envar[i + 1], "=");
 		envar[i + 1] = ft_strcat(envar[i + 1], arg2);
-		ft_strdel(&arg1);
+		free(arg1);
+		free(arg2);
 		return (envar);
 	}
 	return (envar);
@@ -58,8 +49,8 @@ char	**ft_seteqenv(char **envar, char *arg1)
 		envar = ft_dup_builtin(envar);
 		envar[i + 1] = ft_strdup(arg1);
 		(!ft_strchr(arg1, '=')) ? envar[i + 1] = ft_strcat(envar[i + 1],  "=") : NULL;
+		ft_strdel(&arg1);
 	}
-	ft_strdel(&arg1);
 	return (envar);
 }
 
@@ -72,6 +63,7 @@ char  **ft_builtin(char **arg, char **envar)
 		if (ft_checkarg(arg) != 0)
 			(arg[2]) ? (envar = ft_setsenv(envar, arg[1], arg[2])) :
 			(envar = ft_seteqenv(envar, arg[1]));
+		free(arg[0]);
 	}
 	if (ft_strcmp(arg[0], "env") == 0)
 	{
@@ -86,6 +78,7 @@ char  **ft_builtin(char **arg, char **envar)
 			while (arg[j])
 			{
 				envar = ft_unsetenv(envar, arg[j]);
+				free_envar(arg);
 				j++;
 			}
 		}
