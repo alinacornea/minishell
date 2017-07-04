@@ -1,10 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_cd.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: alcornea <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/06/21 16:24:28 by alcornea          #+#    #+#             */
+/*   Updated: 2017/06/21 16:25:21 by alcornea         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-char *ft_setnew(char *str, char **arg)
+char	*ft_setnew(char *str, char **arg)
 {
-	char *tmp;
-	size_t i;
-	size_t j;
+	char	*tmp;
+	size_t	i;
+	size_t	j;
 
 	i = 0;
 	j = 0;
@@ -18,12 +30,12 @@ char *ft_setnew(char *str, char **arg)
 		j++;
 		i++;
 	}
-	str = ft_strjoin(str, tmp);
+	str = ft_strcat(str, tmp);
 	tmp ? free(tmp) : (0);
 	return (str);
 }
 
-int find_arg(char **envar, char *str)
+int		find_arg(char **envar, char *str)
 {
 	int i;
 
@@ -37,7 +49,7 @@ int find_arg(char **envar, char *str)
 	return (-1);
 }
 
-void ft_gotodir(char *tmp, char **arg)
+void	ft_gotodir(char *tmp, char **arg)
 {
 	char *new;
 
@@ -53,47 +65,63 @@ void ft_gotodir(char *tmp, char **arg)
 	new ? ft_strdel(&new) : (0);
 }
 
-char **ft_home(char *tmp, char **arg, char **envar)
+char	**ft_home(char **arg, char **envar, t_cd *cd)
 {
-	int pwd;
-	char *new;
-	char *param;
+	char	*new;
+	char	*tmp1;
 
 	new = get_param(envar[find_arg(envar, "HOME")]);
-	if (arg[1] && ft_strlen (arg[1]) > 1)
-		new = ft_setnew(new, arg);
-	chdir(new);
-	pwd = find_arg(envar, "PWD");
-	if (pwd != -1)
+	if (arg[1] && ft_strlen(arg[1]) > 1)
 	{
-		param = get_param(envar[pwd]);
-		envar[find_arg(envar, "OLDPWD")] = ft_strjoin("OLDPWD=", param);
-		envar[pwd] = ft_strjoin("PWD=", getcwd(tmp, 2048));
-		ft_strdel(&param);
+		new = ft_setnew(new, arg);
+	}
+	chdir(new);
+	if (cd->pwd != -1)
+	{
+		envar[cd->old] ? free(envar[cd->old]) : (0);
+		envar[cd->old] = ft_strjoin("OLDPWD=", cd->param);
+		tmp1 = envar[cd->pwd];
+		envar[cd->pwd] = ft_strjoin("PWD=", cd->cwd);
+		ft_strdel(&cd->param);
+		ft_strdel(&tmp1);
+		ft_strdel(&cd->cwd);
 	}
 	new ? ft_strdel(&new) : (0);
 	return (envar);
 }
 
-char **ft_cd(char **arg, char **envar)
+void init_struct(char **envar, t_cd *cd)
 {
-	char	*tmp;
-	char	*tmp2;
+	cd->tmp = NULL;
+	cd->pwd = find_arg(envar, "PWD");
+	cd->tmp2 = ft_strchr(envar[cd->pwd], '=');
+	cd->cwd = getcwd(cd->tmp, 2048);
+	cd->param = get_param(envar[cd->pwd]);
+	cd->old = find_arg(envar, "OLDPWD");
+}
 
-	tmp = NULL;
-	tmp2 = ft_strchr(envar[find_arg(envar, "PWD")], '=');
+char	**ft_cd(char **arg, char **envar)
+{
+	t_cd *cd = NULL;
+
+	init_struct(envar, cd);
 	if (find_arg(envar, "HOME") == -1)
-		envar = ft_setsenv(envar, "HOME", getcwd(tmp, 2049));
-	if(!arg[1] || (ft_strncmp(arg[1], "~", 1) == 0 && envar[0]))
-		envar = ft_home(tmp, arg, envar);
+		envar = ft_setsenv(envar, "HOME", cd->cwd);
+	if (!arg[1] || (ft_strncmp(arg[1], "~", 1) == 0 && envar[0]))
+		envar = ft_home(arg, envar, cd);
 	else if (arg[1] && (access(arg[1], F_OK)) == 0)
 	{
-		ft_gotodir(tmp, arg);
-		envar[find_arg(envar, "OLDPWD")] = ft_strjoin("OLDPWD", tmp2);
-		envar[find_arg(envar, "PWD")] = ft_strjoin("PWD=", getcwd(tmp, 2048));
+		ft_gotodir(cd->tmp, arg);
+		envar[cd->old] ? free(envar[cd->old]) : (0);
+		envar[cd->old] = ft_strjoin("OLDPWD", cd->tmp2);
+		cd->fr = envar[cd->pwd];
+		envar[cd->pwd] = ft_strjoin("PWD=", cd->cwd);
+		ft_strdel(&cd->cwd);
+		ft_strdel(&cd->fr);
 	}
 	else if (access(arg[1], F_OK) == -1 && envar[0])
-		(ft_strcmp(arg[1], "-") == 0) ? ft_printlast(envar) : ft_printf("cd: no such file or directory: %s\n", arg[1]);
+		(ft_strcmp(arg[1], "-") == 0) ? ft_printlast(envar) :
+			ft_printf("%s%s\n", FILE, arg[1]);
 	free_tab(arg);
 	return (envar);
 }

@@ -16,6 +16,7 @@
 # define ALPHA "setenv: Variable name must contain alphanumeric characters."
 # define NOT ": Command not found."
 #	define CL "\e[1;1H\e[2J"
+#	define FILE "cd: no such file or directory:"
 # define RED "\033[31m"
 # define RESET "\033[0m"
 
@@ -27,6 +28,17 @@ typedef	struct		s_exe
 	int		w;
 	char	*tmp;
 }					t_exe;
+
+typedef struct		s_cd
+{
+	int pwd;
+	int old;
+	char *param;
+	char *cwd;
+	char *tmp;
+	char *fr;
+	char *tmp2;
+}								t_cd;
 
 char **ft_execute(char **arg, char **envar);
 char **ft_builtin(char **arg, char **envar);

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_rest.c                                          :+:      :+:    :+:   */
+/*   ft_forkexe.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alcornea <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-int ft_compare(char **envar, char *path)
+int		ft_compare(char **envar, char *path)
 {
 	int i;
 
@@ -26,7 +26,7 @@ int ft_compare(char **envar, char *path)
 	return (-1);
 }
 
-char *get_path(char *arg, char *tab)
+char	*get_path(char *arg, char *tab)
 {
 	char *tmp;
 
@@ -35,11 +35,11 @@ char *get_path(char *arg, char *tab)
 	return (tmp);
 }
 
-char *get_param(char *str)
+char	*get_param(char *str)
 {
-	int j;
-	size_t i;
-	char *param;
+	int		j;
+	size_t	i;
+	char	*param;
 
 	i = 0;
 	j = 0;
@@ -56,11 +56,11 @@ char *get_param(char *str)
 	return (param);
 }
 
-char **set_tab(char **envar)
+char	**set_tab(char **envar)
 {
-	char **tab;
-	int value;
-	char *param;
+	char	**tab;
+	int		value;
+	char	*param;
 
 	value = ft_compare(envar, "PATH=");
 	param = get_param(envar[value]);
@@ -72,11 +72,11 @@ char **set_tab(char **envar)
 	return (tab);
 }
 
-void ft_forkexe(char **arg, char **envar)
+void	ft_forkexe(char **arg, char **envar)
 {
 	t_exe exe;
 
-	exe.i = 0;
+	exe.i = -1;
 	exe.pid = 1;
 	exe.pid = fork();
 	exe.tab = set_tab(envar);
@@ -87,13 +87,13 @@ void ft_forkexe(char **arg, char **envar)
 		execve(arg[0], arg, envar);
 		if (ft_getbuiltin(arg) < 0)
 		{
-			while (exe.tab[exe.i])
+			while (exe.tab[++exe.i])
 			{
 				exe.tmp = get_path(arg[0], exe.tab[exe.i]);
 				execve(exe.tmp, arg, envar);
-				exe.i++;
 			}
-			(!ft_strcmp(arg[0], "clear")) ? ft_printf("%s", CL) : ft_printf("%s%s\n", arg[0], NOT);
+			(!ft_strcmp(arg[0], "clear")) ? ft_printf("%s", CL) :
+			 ft_printf("%s%s\n", arg[0], NOT);
 		}
 		exit(0);
 	}

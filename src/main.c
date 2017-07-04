@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: alcornea <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2017/06/21 16:24:28 by alcornea          #+#    #+#             */
+/*   Updated: 2017/06/21 16:25:21 by alcornea         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 char	**ft_env(char **env)
@@ -16,7 +28,7 @@ char	**ft_env(char **env)
 	return (tmp);
 }
 
-int ft_getbuiltin(char **arg)
+int		ft_getbuiltin(char **arg)
 {
 	if (!ft_strcmp(arg[0], "echo"))
 		return (2);
@@ -31,7 +43,7 @@ int ft_getbuiltin(char **arg)
 	return (-1);
 }
 
-char  **ft_execute(char **arg, char **envar)
+char	**ft_execute(char **arg, char **envar)
 {
 	if (ft_strcmp(arg[0], "exit") == 0)
 	{
@@ -42,8 +54,8 @@ char  **ft_execute(char **arg, char **envar)
 	}
 	else if (!ft_getbuiltin(arg))
 		envar = ft_builtin(arg, envar);
-	else if(ft_getbuiltin(arg) == 1)
- 		envar = ft_cd(arg, envar);
+	else if (ft_getbuiltin(arg) == 1)
+		envar = ft_cd(arg, envar);
 	else if (ft_getbuiltin(arg) == 2)
 		envar = ft_parse_echo(arg, envar);
 	else
@@ -51,7 +63,7 @@ char  **ft_execute(char **arg, char **envar)
 	return (envar);
 }
 
-int	main(int argc, char **argv, char **env)
+int		main(int argc, char **argv, char **env)
 {
 	int		nb;
 	char	line[1024];
@@ -62,18 +74,18 @@ int	main(int argc, char **argv, char **env)
 		envar = ft_env(env);
 	while (1)
 	{
-			ft_printf("\033[31m<3 \033[0m");
-			nb = read(0, line, 1024);
-			if (nb == 0)
-			{
-				ft_putchar('\n');
-				exit(0);
-			}
-			line[nb - 1] = '\0';
-			arg = ft_strsplit(line, ' ');
-			!arg[0] ? free(arg) : (0);
-			if (arg[0] && env[0])
-				envar = ft_execute(arg, envar);
+		ft_printf("\033[31m<3 \033[0m");
+		nb = read(0, line, 1024);
+		if (nb == 0)
+		{
+			ft_putchar('\n');
+			exit(0);
+		}
+		line[nb - 1] = '\0';
+		arg = ft_strsplit(line, ' ');
+		!arg[0] ? free(arg) : (0);
+		if (arg[0] && env[0])
+			envar = ft_execute(arg, envar);
 	}
 	return (0);
 }
