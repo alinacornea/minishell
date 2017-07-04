@@ -19,9 +19,6 @@
 # define RED "\033[31m"
 # define RESET "\033[0m"
 
-
-int g_len;
-
 typedef	struct		s_exe
 {
 	char	**tab;
@@ -43,6 +40,7 @@ int ft_getbuiltin(char **arg);
 int ft_compare(char **envar, char *path);
 void free_tab(char **tab);
 void free_envar(char **envar);
+void free_arg(char **arg);
 int find_arg(char **envar, char *str);
 int	ft_strrlen(char **tab);
 int ft_checkarg(char **arg);

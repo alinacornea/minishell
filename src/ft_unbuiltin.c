@@ -8,8 +8,8 @@ char		**ft_tabreallocless(char **envar, int j)
 
 	k = 0;
 	i = 0;
-	tmp = (char**)malloc(sizeof(char*) * g_len);
-	while (i < g_len)
+	tmp = (char**)malloc(sizeof(char*) * ft_strllen(envar));
+	while (i < ft_strllen(envar))
 	{
 		if (i == j)
 			i++;
@@ -31,14 +31,15 @@ char **ft_unsetenv(char **envar, char *param)
 	int j;
 
 	i = 0;
-	param = ft_strcat(param, "=");
-	while (i < g_len)
+	param = ft_strjoin(param, "=");
+	while (i < ft_strllen(envar))
 	{
 		if (!ft_strncmp(envar[i], param, ft_strlen(param)))
 			j = i;
 		i++;
 	}
 	envar = ft_tabreallocless(envar, j);
+	free(param);
 	return (envar);
 
 }

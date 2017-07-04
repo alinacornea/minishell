@@ -6,7 +6,7 @@ char **ft_dup_builtin(char **envar)
 	char	**tmp;
 
 	i = 0;
-	if (!(tmp = (char **)malloc(sizeof(char *) * (g_len + 2))))
+	if (!(tmp = (char **)malloc(sizeof(char *) * (ft_strllen(envar) + 2))))
 		return (NULL);
 	while (envar[i])
 	{
@@ -22,9 +22,9 @@ char **ft_setsenv(char **envar, char *arg1, char *arg2)
 	int i;
 
 	i = 0;
-	while (ft_strncmp(envar[i], arg1, ft_strlen(arg1)) && i < g_len - 1)
+	while (ft_strncmp(envar[i], arg1, ft_strlen(arg1)) && i < ft_strllen(envar)  - 1)
 		i++;
-	if ((i + 1) == g_len)
+	if ((i + 1) == ft_strllen(envar))
 	{
 		envar = ft_dup_builtin(envar);
 		envar[i + 1] = ft_strdup(arg1);
@@ -42,9 +42,9 @@ char	**ft_seteqenv(char **envar, char *arg1)
 	int i;
 
 	i = 0;
-	while (ft_strncmp(envar[i], arg1, ft_strlen(arg1)) && i < g_len - 1)
+	while (ft_strncmp(envar[i], arg1, ft_strlen(arg1)) && i < ft_strllen(envar) - 1)
 		i++;
-	if ((i + 1) == g_len)
+	if ((i + 1) == ft_strllen(envar))
 	{
 		envar = ft_dup_builtin(envar);
 		envar[i + 1] = ft_strdup(arg1);
@@ -58,18 +58,13 @@ char  **ft_builtin(char **arg, char **envar)
 {
 	int j;
 
-	if (!ft_strcmp(arg[0], "setenv"))
+	if (arg[1] && !ft_strcmp(arg[0], "setenv") && ft_checkarg(arg))
 	{
-		if (ft_checkarg(arg) != 0)
 			(arg[2]) ? (envar = ft_setsenv(envar, arg[1], arg[2])) :
 			(envar = ft_seteqenv(envar, arg[1]));
-		free(arg[0]);
 	}
 	if (ft_strcmp(arg[0], "env") == 0)
-	{
 		ft_envdisplay(envar);
-		free_envar(arg);
-	}
 	if (!ft_strncmp(arg[0], "unsetenv", ft_strlen("unsetenv")))
 	{
 		j = 1;
@@ -78,11 +73,10 @@ char  **ft_builtin(char **arg, char **envar)
 			while (arg[j])
 			{
 				envar = ft_unsetenv(envar, arg[j]);
-				free_envar(arg);
 				j++;
 			}
 		}
 	}
-	arg ? free(arg) : (0);
+	arg ? free_arg(arg) : (0);
 	return (envar);
 }

@@ -1,13 +1,9 @@
 #include "minishell.h"
 
-int ft_strrlen(char **tab)
+void free_arg(char **arg)
 {
-	int i;
-
-	i = 0;
-	while (tab[i])
-		i++;
-	return (i);
+  arg ? free(arg) : (0);
+  arg[0] ? free(arg[0]) : (0);
 }
 
 void ft_printlast(char **envar)
@@ -28,9 +24,9 @@ void ft_envdisplay(char **envar)
 	int i;
 
 	i = 0;
-	while (envar[i] && i < g_len)
+	while (envar[i] && i < ft_strllen(envar))
 	{
-		printf("%s\n", envar[i]);
+		ft_printf("%s\n", envar[i]);
 		i++;
 	}
 }
@@ -38,24 +34,23 @@ void ft_envdisplay(char **envar)
 int ft_checkarg(char **arg)
 {
 	int i;
-	int flag;
 
-	i = 0;
-	flag = 0;
-	while (arg[i])
-	{
-		if (ft_strrlen(arg) > 3)
-		{
-			ft_printf("%s\n", ARGS);
-			flag = 1;
-			break ;
-		}
-		else if (ft_isdigit(arg[i][0]) && ft_strrlen(arg) <= 3)
+  i = 0;
+  while (arg[i])
+  {
+  	if (ft_strllen(arg) > 3)
+  	{
+  		ft_printf("%s\n", ARGS);
+  		return (0);
+  		break ;
+  	}
+  	else if (ft_isdigit(arg[i][0]) && ft_strllen(arg) <= 3)
     {
-			ft_printf("%s\n", LETTER);
+  		ft_printf("%s\n", LETTER);
+      return (0);
       break ;
     }
-		i++;
-	}
-	return (flag ? 0 : 1);
+  	i++;
+  }
+	return (1);
 }

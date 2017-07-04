@@ -6,7 +6,7 @@ char	**ft_env(char **env)
 	char	**tmp;
 
 	i = 0;
-	if (!(tmp = malloc(sizeof(char*) * ft_strrlen(env) + 1)))
+	if (!(tmp = malloc(sizeof(char*) * ft_strllen(env) + 1)))
 		return (NULL);
 	while (env[i])
 	{
@@ -71,11 +71,9 @@ int	main(int argc, char **argv, char **env)
 			}
 			line[nb - 1] = '\0';
 			arg = ft_strsplit(line, ' ');
-			printf("arg[0]: %p\n",arg[0] );
-			g_len = ft_strrlen(envar);
+			!arg[0] ? free(arg) : (0);
 			if (arg[0] && env[0])
 				envar = ft_execute(arg, envar);
-			// arg[0] ? ft_strdel(&arg[0]) : (0);
 	}
 	return (0);
 }
