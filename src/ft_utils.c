@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-void init_struct(char **envar, t_cd *cd)
+void	init_struct(char **envar, t_cd *cd)
 {
 	cd->tmp = NULL;
 	cd->fr = NULL;
@@ -35,7 +35,6 @@ void	ft_printlast(char **envar)
 	str ? ft_printf("~%s\n", str) : ft_printf("~\n");
 	str ? free(str) : (0);
 }
-
 
 void	ft_envdisplay(char **envar)
 {

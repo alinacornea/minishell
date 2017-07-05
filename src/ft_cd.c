@@ -73,7 +73,10 @@ char	**ft_home(char **arg, char **envar, t_cd *cd)
 
 	new = get_param(envar[find_arg(envar, "HOME")]);
 	if (arg[1] && ft_strlen(arg[1]) > 1)
+	{
 		new = ft_setnew(new, arg);
+		(access(new, F_OK) == -1) ? ft_printf("%s %s\n", FILE, new) : (0);
+	}
 	chdir(new);
 	if (cd->pwd != -1)
 	{
@@ -107,6 +110,8 @@ char	**ft_cd(char **arg, char **envar)
 	else if (access(arg[1], F_OK) == -1 && envar[0])
 		(ft_strcmp(arg[1], "-") == 0) ? ft_printlast(envar) :
 			ft_printf("%s %s\n", FILE, arg[1]);
+	else if (access(arg[1], R_OK) == -1 && envar[0])
+		ft_printf("%s %s\n", DEN, arg[1]);
 	free_struct(cd, arg);
 	return (envar);
 }

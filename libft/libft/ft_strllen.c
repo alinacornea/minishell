@@ -5,14 +5,14 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: alcornea <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/07/02 13:38:40 by alcornea          #+#    #+#             */
-/*   Updated: 2017/07/02 114:35:44 by alcornea         ###   ########.fr      */
+/*   Created: 2017/01/05 13:38:40 by alcornea          #+#    #+#             */
+/*   Updated: 2017/01/05 19:35:44 by alcornea         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int ft_strllen(char **tab)
+int	ft_strllen(char **tab)
 {
 	int i;
 

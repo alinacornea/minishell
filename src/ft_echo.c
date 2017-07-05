@@ -12,10 +12,10 @@
 
 #include "minishell.h"
 
-void free_struct(t_cd *cd, char **arg)
+void	free_struct(t_cd *cd, char **arg)
 {
 	ft_strdel(&cd->param);
-	ft_strdel(&cd->fr);
+	cd->fr ? ft_strdel(&cd->fr) : (0);
 	ft_strdel(&cd->cwd);
 	free(cd);
 	free_tab(arg);

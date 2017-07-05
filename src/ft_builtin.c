@@ -58,7 +58,6 @@ char	**ft_seteqenv(char **envar, char *arg1)
 
 	i = 0;
 	len = ft_strllen(envar);
-
 	while (ft_strncmp(envar[i], arg1, ft_strlen(arg1)) && i < len - 1)
 		i++;
 	if ((i + 1) == len)
@@ -66,7 +65,7 @@ char	**ft_seteqenv(char **envar, char *arg1)
 		envar = ft_dup_builtin(envar);
 		envar[i + 1] = ft_strdup(arg1);
 		(!ft_strchr(arg1, '=')) ? envar[i + 1] = ft_strcat(envar[i + 1], "=")
-		 : NULL;
+		: NULL;
 		ft_strdel(&arg1);
 	}
 	return (envar);

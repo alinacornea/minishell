@@ -76,7 +76,6 @@ char	**set_tab(char **envar)
 	return (NULL);
 }
 
-
 void	ft_forkexe(char **arg, char **envar)
 {
 	t_exe exe;
@@ -96,8 +95,8 @@ void	ft_forkexe(char **arg, char **envar)
 				execve(exe.tmp, arg, envar);
 			}
 			(!ft_strcmp(arg[0], "clear")) ? ft_printf("%s", CL) :
-			 ft_printf("%s%s\n", arg[0], NOT);
-			 free_tab(exe.tab);
+			ft_printf("%s%s\n", arg[0], NOT);
+			free_tab(exe.tab);
 		}
 		exit(0);
 	}
