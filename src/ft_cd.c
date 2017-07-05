@@ -54,6 +54,8 @@ void	ft_gotodir(char *tmp, char **arg)
 	char *new;
 	char *str;
 
+	if (!ft_strncmp(arg[1], "/", 1))
+		new = arg[1];
 	if (ft_strcmp(arg[1], "/"))
 	{
 		str = getcwd(tmp, 2048);
@@ -97,7 +99,7 @@ char	**ft_cd(char **arg, char **envar)
 	init_struct(envar, cd);
 	if (find_arg(envar, "HOME") == -1)
 		envar = ft_setsenv(envar, "HOME", cd->cwd);
-	if (!arg[1] || (ft_strncmp(arg[1], "~", 1) == 0 && envar[0]))
+	if (!arg[1] || (!ft_strncmp(arg[1], "~", 1)))
 		envar = ft_home(arg, envar, cd);
 	else if (arg[1] && (access(arg[1], F_OK)) == 0)
 	{

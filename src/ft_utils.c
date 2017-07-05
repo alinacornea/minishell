@@ -32,6 +32,7 @@ void	ft_printlast(char **envar)
 	oldpwd = find_arg(envar, "OLDPWD");
 	if (ft_strlen(envar[oldpwd]) > 26)
 		str = ft_strsub(envar[oldpwd], 27, ft_strlen(envar[oldpwd]) - 27);
+	envar[find_arg(envar, "PWD")] = 
 	str ? ft_printf("~%s\n", str) : ft_printf("~\n");
 	str ? free(str) : (0);
 }

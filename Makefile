@@ -35,7 +35,6 @@ SRC_NAME = main.c \
 			ft_builtin.c \
 			ft_unbuiltin.c \
 			ft_utils.c \
-			# leak.c
 
 all: $(NAME)
 
