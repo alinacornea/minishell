@@ -12,6 +12,15 @@
 
 #include "minishell.h"
 
+void free_struct(t_cd *cd, char **arg)
+{
+	ft_strdel(&cd->param);
+	ft_strdel(&cd->fr);
+	ft_strdel(&cd->cwd);
+	free(cd);
+	free_tab(arg);
+}
+
 void	free_tab(char **tab)
 {
 	int i;
@@ -42,6 +51,7 @@ int		ft_echoenv(char **arg, char **envar, int i)
 {
 	int		value;
 	char	*sign;
+	char	*param;
 
 	sign = NULL;
 	if (arg[i][0] == '$')
@@ -49,11 +59,12 @@ int		ft_echoenv(char **arg, char **envar, int i)
 	else
 		sign = ft_strsub(arg[i], 2, ft_strlen(arg[i]) - 3);
 	value = ft_compare(envar, sign);
+	param = get_param(envar[value]);
 	if (value != -1)
-		ft_printf("%s\n", get_param(envar[value]));
+		ft_printf("%s\n", param);
 	else
 		ft_printf("%s: Undefined variable.\n", sign);
-	// free_tab(arg);
+	param ? ft_strdel(&param) : (0);
 	sign ? ft_strdel(&sign) : (0);
 	return (0);
 }

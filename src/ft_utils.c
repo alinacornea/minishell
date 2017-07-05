@@ -12,10 +12,15 @@
 
 #include "minishell.h"
 
-void	free_arg(char **arg)
+void init_struct(char **envar, t_cd *cd)
 {
-	arg ? free(arg) : (0);
-	arg[0] ? free(arg[0]) : (0);
+	cd->tmp = NULL;
+	cd->fr = NULL;
+	cd->pwd = find_arg(envar, "PWD");
+	cd->old = find_arg(envar, "OLDPWD");
+	cd->tmp2 = ft_strchr(envar[cd->pwd], '=');
+	cd->cwd = getcwd(cd->tmp, 2048);
+	cd->param = get_param(envar[cd->pwd]);
 }
 
 void	ft_printlast(char **envar)

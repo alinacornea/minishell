@@ -63,30 +63,33 @@ char	**set_tab(char **envar)
 	char	*param;
 
 	value = ft_compare(envar, "PATH=");
-	param = get_param(envar[value]);
-	if (value == 1)
-		tab = ft_strsplit("/bin:/usr/bin", ':');
-	else
-		tab = ft_strsplit(param, ':');
-	param ? ft_strdel(&param) : (0);
-	return (tab);
+	if (value != -1)
+	{
+		param = get_param(envar[value]);
+		if (value == 1)
+			tab = ft_strsplit("/bin:/usr/bin", ':');
+		else
+			tab = ft_strsplit(param, ':');
+		param ? ft_strdel(&param) : (0);
+		return (tab);
+	}
+	return (NULL);
 }
+
 
 void	ft_forkexe(char **arg, char **envar)
 {
 	t_exe exe;
 
 	exe.i = -1;
-	exe.pid = 1;
 	exe.pid = fork();
-	exe.tab = set_tab(envar);
-	if (exe.pid > 0)
-		wait(&exe.w);
+	(exe.pid > 0) ? wait(&exe.w) : (0);
 	if (exe.pid == 0)
 	{
 		execve(arg[0], arg, envar);
 		if (ft_getbuiltin(arg) < 0)
 		{
+			exe.tab = set_tab(envar);
 			while (exe.tab[++exe.i])
 			{
 				exe.tmp = get_path(arg[0], exe.tab[exe.i]);
@@ -94,9 +97,9 @@ void	ft_forkexe(char **arg, char **envar)
 			}
 			(!ft_strcmp(arg[0], "clear")) ? ft_printf("%s", CL) :
 			 ft_printf("%s%s\n", arg[0], NOT);
+			 free_tab(exe.tab);
 		}
 		exit(0);
 	}
-	free_tab(exe.tab);
 	free_tab(arg);
 }

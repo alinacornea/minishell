@@ -52,10 +52,12 @@ int		find_arg(char **envar, char *str)
 void	ft_gotodir(char *tmp, char **arg)
 {
 	char *new;
+	char *str;
 
 	if (ft_strcmp(arg[1], "/"))
 	{
-		new = ft_strcat(getcwd(tmp, 2048), "/");
+		str = getcwd(tmp, 2048);
+		new = ft_strcat(str, "/");
 		new = ft_strcat(new, arg[1]);
 		new = ft_strcat(new, "/");
 	}
@@ -68,42 +70,27 @@ void	ft_gotodir(char *tmp, char **arg)
 char	**ft_home(char **arg, char **envar, t_cd *cd)
 {
 	char	*new;
-	char	*tmp1;
 
 	new = get_param(envar[find_arg(envar, "HOME")]);
 	if (arg[1] && ft_strlen(arg[1]) > 1)
-	{
 		new = ft_setnew(new, arg);
-	}
 	chdir(new);
 	if (cd->pwd != -1)
 	{
 		envar[cd->old] ? free(envar[cd->old]) : (0);
 		envar[cd->old] = ft_strjoin("OLDPWD=", cd->param);
-		tmp1 = envar[cd->pwd];
+		cd->fr = envar[cd->pwd];
 		envar[cd->pwd] = ft_strjoin("PWD=", cd->cwd);
-		ft_strdel(&cd->param);
-		ft_strdel(&tmp1);
-		ft_strdel(&cd->cwd);
 	}
 	new ? ft_strdel(&new) : (0);
 	return (envar);
 }
 
-void init_struct(char **envar, t_cd *cd)
-{
-	cd->tmp = NULL;
-	cd->pwd = find_arg(envar, "PWD");
-	cd->tmp2 = ft_strchr(envar[cd->pwd], '=');
-	cd->cwd = getcwd(cd->tmp, 2048);
-	cd->param = get_param(envar[cd->pwd]);
-	cd->old = find_arg(envar, "OLDPWD");
-}
-
 char	**ft_cd(char **arg, char **envar)
 {
-	t_cd *cd = NULL;
+	t_cd *cd;
 
+	cd = ft_memalloc(sizeof(t_cd));
 	init_struct(envar, cd);
 	if (find_arg(envar, "HOME") == -1)
 		envar = ft_setsenv(envar, "HOME", cd->cwd);
@@ -116,12 +103,10 @@ char	**ft_cd(char **arg, char **envar)
 		envar[cd->old] = ft_strjoin("OLDPWD", cd->tmp2);
 		cd->fr = envar[cd->pwd];
 		envar[cd->pwd] = ft_strjoin("PWD=", cd->cwd);
-		ft_strdel(&cd->cwd);
-		ft_strdel(&cd->fr);
 	}
 	else if (access(arg[1], F_OK) == -1 && envar[0])
 		(ft_strcmp(arg[1], "-") == 0) ? ft_printlast(envar) :
-			ft_printf("%s%s\n", FILE, arg[1]);
-	free_tab(arg);
+			ft_printf("%s %s\n", FILE, arg[1]);
+	free_struct(cd, arg);
 	return (envar);
 }

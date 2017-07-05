@@ -35,6 +35,7 @@ char	**ft_tabreallocless(char **envar, int j)
 		i++;
 		k++;
 	}
+	free(envar);
 	return (tmp);
 }
 
@@ -44,13 +45,14 @@ char	**ft_unsetenv(char **envar, char *param)
 	int j;
 
 	i = 0;
-	param = ft_strjoin(param, "=");
+	param = ft_strcat(param, "=");
 	while (i < ft_strllen(envar))
 	{
 		if (!ft_strncmp(envar[i], param, ft_strlen(param)))
 			j = i;
 		i++;
 	}
+	free(envar[j]);
 	envar = ft_tabreallocless(envar, j);
 	free(param);
 	return (envar);

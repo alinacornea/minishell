@@ -17,7 +17,6 @@ NAME= minishell
 CC= gcc -g
 
 CFLAGS+= -Wall -Wextra -Werror
-# -fsanitize=address
 
 SRC_PATH= src/
 INC_PATH= includes/

@@ -50,6 +50,7 @@ char	**ft_execute(char **arg, char **envar)
 		ft_putstr("exit\n");
 		free_tab(arg);
 		envar ? free_tab(envar) : (0);
+		// sleep(20);
 		exit(0);
 	}
 	else if (!ft_getbuiltin(arg))

@@ -58,6 +58,7 @@ char	**ft_seteqenv(char **envar, char *arg1)
 
 	i = 0;
 	len = ft_strllen(envar);
+
 	while (ft_strncmp(envar[i], arg1, ft_strlen(arg1)) && i < len - 1)
 		i++;
 	if ((i + 1) == len)
@@ -94,6 +95,7 @@ char	**ft_builtin(char **arg, char **envar)
 			}
 		}
 	}
-	arg ? free_arg(arg) : (0);
+	arg ? free(arg) : (0);
+	arg[0] ? free(arg[0]) : (0);
 	return (envar);
 }
