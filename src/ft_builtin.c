@@ -23,18 +23,20 @@ char	**ft_dup_builtin(char **envar)
 	while (envar[i])
 	{
 		tmp[i] = ft_strdup(envar[i]);
-		// printf("tmp[i]%s\n", tmp[i]);
-		// printf("envar[i]%s\n", envar[i]);
 		i++;
 	}
+	tmp[i] = NULL;
+	tmp[i + 1] = NULL;
 	envar ? free_tab(envar) : (0);
 	return (tmp);
 }
 
 char	**ft_setsenv(char **envar, char *arg1, char *arg2)
 {
-	int i;
-	int len;
+	int		i;
+	int		len;
+	char	*tmp;
+	char	*tmp2;
 
 	i = 0;
 	len = ft_strllen(envar);
@@ -43,10 +45,11 @@ char	**ft_setsenv(char **envar, char *arg1, char *arg2)
 	if ((i + 1) == len)
 	{
 		envar = ft_dup_builtin(envar);
-		envar[i + 1] = ft_strdup(arg1);
-		envar[i + 1] = ft_strjoin(envar[i + 1], "=");
-		envar[i + 1] = ft_strjoin(envar[i + 1], arg2);
-		// printf("envar[i + 1]%s\n", envar[i + 1]);
+		tmp2 = ft_strdup(arg1);
+		tmp = ft_strjoin(tmp2, "=");
+		envar[i + 1] = ft_strjoin(tmp, arg2);
+		free(tmp);
+		free(tmp2);
 		free(arg1);
 		free(arg2);
 		return (envar);

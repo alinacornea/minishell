@@ -31,7 +31,6 @@ void	free_tab(char **tab)
 	i = 0;
 	while (tab[i])
 	{
-    printf("free->envar[i]%s\n", tab[i]);
 		tab[i] ? free(tab[i]) : (0);
 		i++;
 	}

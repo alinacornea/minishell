@@ -48,9 +48,8 @@ char	**ft_execute(char **arg, char **envar)
 	if (ft_strcmp(arg[0], "exit") == 0)
 	{
 		ft_putstr("exit\n");
-		free_tab(arg);
 		envar ? free_tab(envar) : (0);
-		sleep(20);
+		arg ? free_tab(arg) : (0);
 		exit(0);
 	}
 	else if (!ft_getbuiltin(arg))
@@ -85,7 +84,7 @@ int		main(int argc, char **argv, char **env)
 		!arg[0] ? free(arg) : (0);
 		if (arg[0] && env[0])
 			envar = ft_execute(arg, envar);
-		free(str);
+		str ? free(str) : (0);
 	}
 	return (0);
 }

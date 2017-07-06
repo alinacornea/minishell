@@ -29,7 +29,7 @@
 # define NOT ": Command not found."
 # define CL "\e[1;1H\e[2J"
 # define FILE "cd: no such file or directory:"
-#	define DEN "cd: permission denied:"
+# define DEN "cd: permission denied:"
 # define RED "\033[31m"
 # define RESET "\033[0m"
 
@@ -69,5 +69,6 @@ void			init_struct(char **envar, t_cd *cd);
 void			free_tab(char **tab);
 void			free_envar(char **envar);
 void			free_struct(t_cd *cd, char **arg);
+void			check_access(char **arg, char **envar);
 
 #endif

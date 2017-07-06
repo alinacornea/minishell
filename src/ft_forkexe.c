@@ -37,7 +37,7 @@ char	*get_path(char *arg, char *tab)
 
 char	*get_param(char *str)
 {
-	size_t		j;
+	size_t	j;
 	size_t	i;
 	char	*param;
 

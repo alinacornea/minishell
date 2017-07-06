@@ -113,10 +113,7 @@ char	**ft_cd(char **arg, char **envar)
 		cd->fr = envar[cd->pwd];
 		envar[cd->pwd] = ft_strjoin("PWD=", cd->cwd);
 	}
-	else if (access(arg[1], F_OK) == -1 && envar[0])
-		ft_printf("%s %s\n", FILE, arg[1]);
-	else if (access(arg[1], R_OK) == -1 && envar[0])
-		ft_printf("%s %s\n", DEN, arg[1]);
+	check_access(arg, envar);
 	free_struct(cd, arg);
 	return (envar);
 }

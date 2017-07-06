@@ -20,7 +20,7 @@ char	**ft_tabreallocless(char **envar, int j)
 
 	k = 0;
 	i = 0;
-	tmp = (char**)malloc(sizeof(char*) * ft_strllen(envar));
+	tmp = (char**)malloc(sizeof(char*) * ft_strllen(envar) + 1);
 	while (i < ft_strllen(envar))
 	{
 		if (i == j)
@@ -28,10 +28,7 @@ char	**ft_tabreallocless(char **envar, int j)
 		if (envar[i] != NULL)
 		{
 			tmp[k] = ft_strdup(envar[i]);
-			printf("tmp[k]: %s\n",tmp[k] );
-			printf("envar[i]: %s\n",envar[i]);
 			envar[i] ? free(envar[i]) : (0);
-			printf("free[i]: %s\n",envar[i]);
 		}
 		else
 			tmp[k] = NULL;
@@ -44,19 +41,21 @@ char	**ft_tabreallocless(char **envar, int j)
 
 char	**ft_unsetenv(char **envar, char *param)
 {
-	int	i;
-	int j;
+	int		i;
+	int		j;
+	char	*tmp;
 
 	i = 0;
-	param = ft_strcat(param, "=");
+	tmp = ft_strjoin(param, "=");
 	while (i < ft_strllen(envar))
 	{
-		if (!ft_strncmp(envar[i], param, ft_strlen(param)))
+		if (!ft_strncmp(envar[i], tmp, ft_strlen(tmp)))
 			j = i;
 		i++;
 	}
 	free(envar[j]);
 	envar = ft_tabreallocless(envar, j);
+	free(tmp);
 	free(param);
 	return (envar);
 }
