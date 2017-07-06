@@ -24,12 +24,20 @@ void	init_struct(char **envar, t_cd *cd)
 	cd->param = get_param(envar[cd->pwd]);
 }
 
-void	check_access(char **arg, char **envar)
+int	check_access(char **arg, char **envar)
 {
+
 	if (access(arg[1], F_OK) == -1 && envar[0])
+	{
 		ft_printf("%s %s\n", FILE, arg[1]);
-	else if (access(arg[1], R_OK | W_OK | X_OK) == -1 && envar[0])
+		return (-1);
+	}
+	else if (access(arg[1], X_OK) == -1 && envar[0])
+	{
 		ft_printf("%s %s\n", DEN, arg[1]);
+		return (-1);
+	}
+	return (0);
 }
 
 int		find_arg(char **envar, char *str)

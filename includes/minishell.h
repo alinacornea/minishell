@@ -69,6 +69,6 @@ void			init_struct(char **envar, t_cd *cd);
 void			free_tab(char **tab);
 void			free_envar(char **envar);
 void			free_struct(t_cd *cd, char **arg);
-void			check_access(char **arg, char **envar);
+int				check_access(char **arg, char **envar);
 
 #endif
