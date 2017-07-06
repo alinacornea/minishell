@@ -37,22 +37,24 @@ char	*get_path(char *arg, char *tab)
 
 char	*get_param(char *str)
 {
-	int		j;
+	size_t		j;
 	size_t	i;
 	char	*param;
 
 	i = 0;
 	j = 0;
+	param = NULL;
 	while (str[i] != '=')
 		i++;
 	i++;
 	param = (char *)malloc(sizeof(char) * (ft_strlen(str) - i));
-	while (i < ft_strlen(str))
+	while (str[i] && i < ft_strlen(str))
 	{
 		param[j] = str[i];
 		i++;
 		j++;
 	}
+	param[j] = '\0';
 	return (param);
 }
 
@@ -66,10 +68,7 @@ char	**set_tab(char **envar)
 	if (value != -1)
 	{
 		param = get_param(envar[value]);
-		if (value == 1)
-			tab = ft_strsplit("/bin:/usr/bin", ':');
-		else
-			tab = ft_strsplit(param, ':');
+		tab = ft_strsplit(param, ':');
 		param ? ft_strdel(&param) : (0);
 		return (tab);
 	}

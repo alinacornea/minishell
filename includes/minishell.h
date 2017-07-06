@@ -65,7 +65,6 @@ int				ft_getbuiltin(char **arg);
 int				ft_compare(char **envar, char *path);
 int				find_arg(char **envar, char *str);
 int				ft_checkarg(char **arg);
-void			ft_printlast(char **envar);
 void			ft_envdisplay(char **envar);
 void			init_struct(char **envar, t_cd *cd);
 void			free_tab(char **tab);

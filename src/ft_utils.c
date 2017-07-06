@@ -12,29 +12,30 @@
 
 #include "minishell.h"
 
+int		find_arg(char **envar, char *str)
+{
+	int i;
+
+	i = 0;
+	while (envar[i] != NULL && str)
+	{
+		if (!ft_strncmp(envar[i], str, ft_strlen(str)))
+			return (i);
+		i++;
+	}
+	return (-1);
+}
+
 void	init_struct(char **envar, t_cd *cd)
 {
 	cd->tmp = NULL;
 	cd->fr = NULL;
+	cd->pwd = 0;
+	cd->old = 0;
 	cd->pwd = find_arg(envar, "PWD");
 	cd->old = find_arg(envar, "OLDPWD");
-	cd->tmp2 = ft_strchr(envar[cd->pwd], '=');
 	cd->cwd = getcwd(cd->tmp, 2048);
 	cd->param = get_param(envar[cd->pwd]);
-}
-
-void	ft_printlast(char **envar)
-{
-	int		oldpwd;
-	char	*str;
-
-	str = NULL;
-	oldpwd = find_arg(envar, "OLDPWD");
-	if (ft_strlen(envar[oldpwd]) > 26)
-		str = ft_strsub(envar[oldpwd], 27, ft_strlen(envar[oldpwd]) - 27);
-	envar[find_arg(envar, "PWD")] = 
-	str ? ft_printf("~%s\n", str) : ft_printf("~\n");
-	str ? free(str) : (0);
 }
 
 void	ft_envdisplay(char **envar)

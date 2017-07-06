@@ -37,7 +37,7 @@ LIBFT_SRC+= ft_memset.c ft_bzero.c ft_memcpy.c ft_memccpy.c \
 						ft_strupcase.c ft_strlowcase.c ft_strndup.c \
 					 	get_next_line.c \
 						ft_wstrdup.c ft_wstrsub.c ft_wmemset.c ft_wstrjoin.c ft_wcharsize.c \
-						ft_itoa_base.c ft_putwchar.c
+						ft_itoa_base.c ft_putwchar.c ft_strlnstr.c 
 
 PRINTF_SRC= ft_printf.c \
 						get_modifiers.c \

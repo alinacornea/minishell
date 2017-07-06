@@ -12,6 +12,21 @@
 
 #include "minishell.h"
 
+char	*ft_printlast(char **envar, char *home, t_cd *cd)
+{
+	int		n;
+	char	*tmp;
+
+	n = 0;
+	tmp = get_param(envar[cd->old]);
+	if ((n = ft_strlnstr(tmp, home)) < 0)
+		ft_printf("~%s\n", tmp);
+	else
+		ft_printf("~%s\n", tmp + n);
+	ft_strdel(&home);
+	return (tmp);
+}
+
 char	*ft_setnew(char *str, char **arg)
 {
 	char	*tmp;
@@ -35,28 +50,13 @@ char	*ft_setnew(char *str, char **arg)
 	return (str);
 }
 
-int		find_arg(char **envar, char *str)
-{
-	int i;
-
-	i = 0;
-	while (envar[i] != NULL && str)
-	{
-		if (!ft_strncmp(envar[i], str, ft_strlen(str)))
-			return (i);
-		i++;
-	}
-	return (-1);
-}
-
 void	ft_gotodir(char *tmp, char **arg)
 {
 	char *new;
 	char *str;
 
-	if (!ft_strncmp(arg[1], "/", 1))
-		new = arg[1];
-	if (ft_strcmp(arg[1], "/"))
+	str = NULL;
+	if (ft_strncmp(arg[1], "/", 1))
 	{
 		str = getcwd(tmp, 2048);
 		new = ft_strcat(str, "/");
@@ -64,7 +64,7 @@ void	ft_gotodir(char *tmp, char **arg)
 		new = ft_strcat(new, "/");
 	}
 	else
-		new = ft_strdup("/");
+		new = ft_strdup(arg[1]);
 	chdir(new);
 	new ? ft_strdel(&new) : (0);
 }
@@ -73,12 +73,15 @@ char	**ft_home(char **arg, char **envar, t_cd *cd)
 {
 	char	*new;
 
+	new = NULL;
 	new = get_param(envar[find_arg(envar, "HOME")]);
 	if (arg[1] && ft_strlen(arg[1]) > 1)
 	{
 		new = ft_setnew(new, arg);
 		(access(new, F_OK) == -1) ? ft_printf("%s %s\n", FILE, new) : (0);
 	}
+	if (arg[1] && !ft_strncmp(arg[1], "-", 1))
+		new = ft_printlast(envar, new, cd);
 	chdir(new);
 	if (cd->pwd != -1)
 	{
@@ -99,19 +102,19 @@ char	**ft_cd(char **arg, char **envar)
 	init_struct(envar, cd);
 	if (find_arg(envar, "HOME") == -1)
 		envar = ft_setsenv(envar, "HOME", cd->cwd);
-	if (!arg[1] || (!ft_strncmp(arg[1], "~", 1)))
+	if (!arg[1] || (!ft_strncmp(arg[1], "~", 1)) ||
+		!ft_strncmp(arg[1], "-", 1))
 		envar = ft_home(arg, envar, cd);
-	else if (arg[1] && (access(arg[1], F_OK)) == 0)
+	else if (arg[1] && (!access(arg[1], F_OK)))
 	{
 		ft_gotodir(cd->tmp, arg);
 		envar[cd->old] ? free(envar[cd->old]) : (0);
-		envar[cd->old] = ft_strjoin("OLDPWD", cd->tmp2);
+		envar[cd->old] = ft_strjoin("OLDPWD=", cd->param);
 		cd->fr = envar[cd->pwd];
 		envar[cd->pwd] = ft_strjoin("PWD=", cd->cwd);
 	}
 	else if (access(arg[1], F_OK) == -1 && envar[0])
-		(ft_strcmp(arg[1], "-") == 0) ? ft_printlast(envar) :
-			ft_printf("%s %s\n", FILE, arg[1]);
+		ft_printf("%s %s\n", FILE, arg[1]);
 	else if (access(arg[1], R_OK) == -1 && envar[0])
 		ft_printf("%s %s\n", DEN, arg[1]);
 	free_struct(cd, arg);

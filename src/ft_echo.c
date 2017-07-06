@@ -14,10 +14,13 @@
 
 void	free_struct(t_cd *cd, char **arg)
 {
-	ft_strdel(&cd->param);
+	cd->pwd = 0;
+	cd->old = 0;
+	free(cd->param);
 	cd->fr ? ft_strdel(&cd->fr) : (0);
 	ft_strdel(&cd->cwd);
 	free(cd);
+	cd->param = NULL;
 	free_tab(arg);
 }
 
