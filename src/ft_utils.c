@@ -12,6 +12,18 @@
 
 #include "minishell.h"
 
+void	init_struct(char **envar, t_cd *cd)
+{
+	cd->tmp = NULL;
+	cd->fr = NULL;
+	cd->pwd = 0;
+	cd->old = 0;
+	cd->pwd = find_arg(envar, "PWD");
+	cd->old = find_arg(envar, "OLDPWD");
+	cd->cwd = getcwd(cd->tmp, 2048);
+	cd->param = get_param(envar[cd->pwd]);
+}
+
 int		find_arg(char **envar, char *str)
 {
 	int i;
@@ -24,18 +36,6 @@ int		find_arg(char **envar, char *str)
 		i++;
 	}
 	return (-1);
-}
-
-void	init_struct(char **envar, t_cd *cd)
-{
-	cd->tmp = NULL;
-	cd->fr = NULL;
-	cd->pwd = 0;
-	cd->old = 0;
-	cd->pwd = find_arg(envar, "PWD");
-	cd->old = find_arg(envar, "OLDPWD");
-	cd->cwd = getcwd(cd->tmp, 2048);
-	cd->param = get_param(envar[cd->pwd]);
 }
 
 void	ft_envdisplay(char **envar)

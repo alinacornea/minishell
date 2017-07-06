@@ -12,44 +12,6 @@
 
 #include "minishell.h"
 
-void	free_struct(t_cd *cd, char **arg)
-{
-	cd->pwd = 0;
-	cd->old = 0;
-	free(cd->param);
-	cd->fr ? ft_strdel(&cd->fr) : (0);
-	ft_strdel(&cd->cwd);
-	free(cd);
-	cd->param = NULL;
-	free_tab(arg);
-}
-
-void	free_tab(char **tab)
-{
-	int i;
-
-	i = 0;
-	while (tab[i])
-	{
-		tab[i] ? free(tab[i]) : (0);
-		tab[i] = NULL;
-		i++;
-	}
-	tab ? free(tab) : (0);
-}
-
-void	free_envar(char **envar)
-{
-	int i;
-
-	i = 0;
-	while (envar[i])
-	{
-		envar[i] ? free(envar[i]) : (0);
-		i++;
-	}
-}
-
 int		ft_echoenv(char **arg, char **envar, int i)
 {
 	int		value;

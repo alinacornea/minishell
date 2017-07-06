@@ -70,6 +70,7 @@ int		main(int argc, char **argv, char **env)
 	char	line[1024];
 	char	**envar;
 	char	**arg;
+	char	*str;
 
 	if (argc && argv && env)
 		envar = ft_env(env);
@@ -77,16 +78,14 @@ int		main(int argc, char **argv, char **env)
 	{
 		ft_printf("\033[31m<3 \033[0m");
 		nb = read(0, line, 1024);
-		if (nb == 0)
-		{
-			ft_putchar('\n');
-			exit(0);
-		}
+		(nb == 0) ? ft_putchar('\n') : (0);
 		line[nb - 1] = '\0';
-		arg = ft_strsplit(line, ' ');
+		str = ft_strtrim(line);
+		arg = ft_strsplit(str, ' ');
 		!arg[0] ? free(arg) : (0);
 		if (arg[0] && env[0])
 			envar = ft_execute(arg, envar);
+		free(str);
 	}
 	return (0);
 }

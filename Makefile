@@ -35,6 +35,7 @@ SRC_NAME = main.c \
 			ft_builtin.c \
 			ft_unbuiltin.c \
 			ft_utils.c \
+			ft_free.c \
 
 all: $(NAME)
 

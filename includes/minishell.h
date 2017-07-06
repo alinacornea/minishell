@@ -53,7 +53,6 @@ typedef struct	s_cd
 	char		*tmp2;
 }				t_cd;
 
-char			**ft_execute(char **arg, char **envar);
 char			**ft_builtin(char **arg, char **envar);
 char			**ft_cd(char **arg, char **envar);
 char			**ft_parse_echo(char **arg, char **envar);

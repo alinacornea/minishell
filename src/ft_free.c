@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_unbuiltin.c                                     :+:      :+:    :+:   */
+/*   ft_free.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alcornea <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,51 +12,40 @@
 
 #include "minishell.h"
 
-char	**ft_tabreallocless(char **envar, int j)
+void	free_struct(t_cd *cd, char **arg)
 {
-	int		i;
-	int		k;
-	char	**tmp;
-
-	k = 0;
-	i = 0;
-	tmp = (char**)malloc(sizeof(char*) * ft_strllen(envar));
-	while (i < ft_strllen(envar))
-	{
-		if (i == j)
-			i++;
-		if (envar[i] != NULL)
-		{
-			tmp[k] = ft_strdup(envar[i]);
-			printf("tmp[k]: %s\n",tmp[k] );
-			printf("envar[i]: %s\n",envar[i]);
-			envar[i] ? free(envar[i]) : (0);
-			printf("free[i]: %s\n",envar[i]);
-		}
-		else
-			tmp[k] = NULL;
-		i++;
-		k++;
-	}
-	free(envar);
-	return (tmp);
+	cd->pwd = 0;
+	cd->old = 0;
+	free(cd->param);
+	cd->fr ? ft_strdel(&cd->fr) : (0);
+	ft_strdel(&cd->cwd);
+	free(cd);
+	cd->param = NULL;
+	free_tab(arg);
 }
 
-char	**ft_unsetenv(char **envar, char *param)
+void	free_tab(char **tab)
 {
-	int	i;
-	int j;
+	int i;
 
 	i = 0;
-	param = ft_strcat(param, "=");
-	while (i < ft_strllen(envar))
+	while (tab[i])
 	{
-		if (!ft_strncmp(envar[i], param, ft_strlen(param)))
-			j = i;
+    printf("free->envar[i]%s\n", tab[i]);
+		tab[i] ? free(tab[i]) : (0);
 		i++;
 	}
-	free(envar[j]);
-	envar = ft_tabreallocless(envar, j);
-	free(param);
-	return (envar);
+	tab ? free(tab) : (0);
+}
+
+void	free_envar(char **envar)
+{
+	int i;
+
+	i = 0;
+	while (envar[i])
+	{
+		envar[i] ? free(envar[i]) : (0);
+		i++;
+	}
 }
