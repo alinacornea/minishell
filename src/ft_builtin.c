@@ -50,10 +50,9 @@ char	**ft_setsenv(char **envar, char *arg1, char *arg2)
 		envar[i + 1] = ft_strjoin(tmp, arg2);
 		free(tmp);
 		free(tmp2);
-		free(arg1);
-		free(arg2);
-		return (envar);
 	}
+	free(arg1);
+	free(arg2);
 	return (envar);
 }
 
