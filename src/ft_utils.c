@@ -12,34 +12,6 @@
 
 #include "minishell.h"
 
-void	init_struct(char **envar, t_cd *cd)
-{
-	cd->tmp = NULL;
-	cd->fr = NULL;
-	cd->pwd = 0;
-	cd->old = 0;
-	cd->pwd = find_arg(envar, "PWD");
-	cd->old = find_arg(envar, "OLDPWD");
-	cd->cwd = getcwd(cd->tmp, 2048);
-	cd->param = get_param(envar[cd->pwd]);
-}
-
-int	check_access(char **arg, char **envar)
-{
-
-	if (access(arg[1], F_OK) == -1 && envar[0])
-	{
-		ft_printf("%s %s\n", FILE, arg[1]);
-		return (-1);
-	}
-	else if (access(arg[1], X_OK) == -1 && envar[0])
-	{
-		ft_printf("%s %s\n", DEN, arg[1]);
-		return (-1);
-	}
-	return (0);
-}
-
 int		find_arg(char **envar, char *str)
 {
 	int i;

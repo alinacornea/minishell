@@ -50,6 +50,7 @@ char	**ft_execute(char **arg, char **envar)
 		ft_putstr("exit\n");
 		envar ? free_tab(envar) : (0);
 		arg ? free_tab(arg) : (0);
+		sleep(10);
 		exit(0);
 	}
 	else if (!ft_getbuiltin(arg))
@@ -69,7 +70,6 @@ int		main(int argc, char **argv, char **env)
 	char	line[1024];
 	char	**envar;
 	char	**arg;
-	char	*str;
 
 	if (argc && argv && env)
 		envar = ft_env(env);
@@ -79,12 +79,10 @@ int		main(int argc, char **argv, char **env)
 		nb = read(0, line, 1024);
 		(nb == 0) ? ft_putchar('\n') : (0);
 		line[nb - 1] = '\0';
-		str = ft_strtrim(line);
-		arg = ft_strsplit(str, ' ');
+		arg = ft_strssplit(line);
 		!arg[0] ? free(arg) : (0);
 		if (arg[0] && env[0])
 			envar = ft_execute(arg, envar);
-		str ? free(str) : (0);
 	}
 	return (0);
 }

@@ -99,6 +99,7 @@ char	**ft_builtin(char **arg, char **envar)
 				j++;
 			}
 		}
+		arg[j] ? free(arg[j]) : (0);
 	}
 	arg ? free(arg) : (0);
 	arg[0] ? free(arg[0]) : (0);

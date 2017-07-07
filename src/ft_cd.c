@@ -12,6 +12,32 @@
 
 #include "minishell.h"
 
+void	init_struct(char **envar, t_cd *cd)
+{
+	cd->pwd = 0;
+	cd->old = 0;
+	cd->fr = NULL;
+	getcwd(cd->cwd, 2048);
+	cd->pwd = find_arg(envar, "PWD");
+	cd->old = find_arg(envar, "OLDPWD");
+	cd->home = get_param(envar[find_arg(envar, "HOME")]);
+}
+
+int		check_access(char **arg, char **envar)
+{
+	if (access(arg[1], F_OK) == -1 && envar[0])
+	{
+		ft_printf("%s %s\n", FILE, arg[1]);
+		return (-1);
+	}
+	else if (access(arg[1], X_OK) == -1 && envar[0])
+	{
+		ft_printf("%s %s\n", DEN, arg[1]);
+		return (-1);
+	}
+	return (0);
+}
+
 char	*ft_printlast(char **envar, char *home, t_cd *cd)
 {
 	int		n;
@@ -23,96 +49,48 @@ char	*ft_printlast(char **envar, char *home, t_cd *cd)
 		ft_printf("~%s\n", tmp);
 	else
 		ft_printf("~%s\n", tmp + n);
-	ft_strdel(&home);
 	return (tmp);
 }
 
-char	*ft_setnew(char *str, char **arg)
+char	**ft_home(char **envar, t_cd *cd)
 {
-	char	*tmp;
-	size_t	i;
-	size_t	j;
+	char	cwd[1024];
 
-	i = 0;
-	j = 0;
-	if (!(tmp = (char *)malloc(sizeof(char) * (ft_strlen(arg[1]) - 1))))
-		return (NULL);
-	while (arg[1][i] == '~')
-		i++;
-	while (i < ft_strlen(arg[1]))
-	{
-		tmp[j] = arg[1][i];
-		j++;
-		i++;
-	}
-	str = ft_strcat(str, tmp);
-	tmp ? free(tmp) : (0);
-	return (str);
-}
-
-void	ft_gotodir(char *tmp, char **arg)
-{
-	char *new;
-	char *str;
-
-	str = NULL;
-	if (ft_strncmp(arg[1], "/", 1))
-	{
-		str = getcwd(tmp, 2048);
-		new = ft_strcat(str, "/");
-		new = ft_strcat(new, arg[1]);
-		new = ft_strcat(new, "/");
-	}
-	else
-		new = ft_strdup(arg[1]);
-	chdir(new);
-	new ? ft_strdel(&new) : (0);
-}
-
-char	**ft_home(char **arg, char **envar, t_cd *cd)
-{
-	char	*new;
-
-	new = NULL;
-	new = get_param(envar[find_arg(envar, "HOME")]);
-	if (arg[1] && ft_strlen(arg[1]) > 1)
-	{
-		new = ft_setnew(new, arg);
-		(access(new, F_OK) == -1) ? ft_printf("%s %s\n", FILE, new) : (0);
-	}
-	if (arg[1] && !ft_strncmp(arg[1], "-", 1))
-		new = ft_printlast(envar, new, cd);
-	chdir(new);
+	getcwd(cwd, 1024);
 	if (cd->pwd != -1)
 	{
 		envar[cd->old] ? free(envar[cd->old]) : (0);
-		envar[cd->old] = ft_strjoin("OLDPWD=", cd->param);
+		envar[cd->old] = ft_strjoin("OLDPWD=", cd->cwd);
 		cd->fr = envar[cd->pwd];
-		envar[cd->pwd] = ft_strjoin("PWD=", cd->cwd);
+		envar[cd->pwd] = ft_strjoin("PWD=", cwd);
 	}
-	new ? ft_strdel(&new) : (0);
 	return (envar);
 }
 
 char	**ft_cd(char **arg, char **envar)
 {
 	t_cd *cd;
+	char *new;
 
+	new = NULL;
 	cd = ft_memalloc(sizeof(t_cd));
 	init_struct(envar, cd);
-	if (find_arg(envar, "HOME") == -1)
-		envar = ft_setsenv(envar, "HOME", cd->cwd);
-	if (!arg[1] || (!ft_strncmp(arg[1], "~", 1)) ||
-		!ft_strncmp(arg[1], "-", 1))
-		envar = ft_home(arg, envar, cd);
-	else if (arg[1] && !check_access(arg, envar))
+	if (!arg[1] || (!ft_strncmp(arg[1], "~", 1)))
 	{
-		ft_gotodir(cd->tmp, arg);
-		envar[cd->old] ? free(envar[cd->old]) : (0);
-		envar[cd->old] = ft_strjoin("OLDPWD=", cd->param);
-		cd->fr = envar[cd->pwd];
-		envar[cd->pwd] = ft_strjoin("PWD=", cd->cwd);
+		if (arg[1])
+			new = ft_strjoin(cd->home, arg[1] + 1);
+		else
+			new = ft_strdup(cd->home);
 	}
+	else if (!ft_strncmp(arg[1], "-", 1))
+		new = ft_printlast(envar, cd->home, cd);
+	else
+		new = ft_strdup(arg[1]);
+	if (chdir(new) < 0)
+		check_access(arg, envar);
+	else
+		ft_home(envar, cd);
+	new ? ft_strdel(&new) : (0);
 	free_struct(cd, arg);
 	return (envar);
 }

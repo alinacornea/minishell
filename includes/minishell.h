@@ -46,11 +46,9 @@ typedef struct	s_cd
 {
 	int			pwd;
 	int			old;
-	char		*param;
-	char		*cwd;
-	char		*tmp;
+	char		cwd[2048];
 	char		*fr;
-	char		*tmp2;
+	char		*home;
 }				t_cd;
 
 char			**ft_builtin(char **arg, char **envar);
@@ -69,6 +67,5 @@ void			init_struct(char **envar, t_cd *cd);
 void			free_tab(char **tab);
 void			free_envar(char **envar);
 void			free_struct(t_cd *cd, char **arg);
-int				check_access(char **arg, char **envar);
 
 #endif

@@ -58,7 +58,7 @@ char	*get_param(char *str)
 	return (param);
 }
 
-char	**set_tab(char **envar)
+char	**set_tab(char **envar, char **arg)
 {
 	char	**tab;
 	int		value;
@@ -72,6 +72,8 @@ char	**set_tab(char **envar)
 		param ? ft_strdel(&param) : (0);
 		return (tab);
 	}
+	else
+		ft_printf("%s%s\n", arg[0], NOT);
 	return (NULL);
 }
 
@@ -87,7 +89,7 @@ void	ft_forkexe(char **arg, char **envar)
 		execve(arg[0], arg, envar);
 		if (ft_getbuiltin(arg) < 0)
 		{
-			exe.tab = set_tab(envar);
+			exe.tab = set_tab(envar, arg);
 			while (exe.tab[++exe.i])
 			{
 				exe.tmp = get_path(arg[0], exe.tab[exe.i]);

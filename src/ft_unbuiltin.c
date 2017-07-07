@@ -18,24 +18,22 @@ char	**ft_tabreallocless(char **envar, int j)
 	int		k;
 	char	**tmp;
 
-	k = 0;
-	i = 0;
-	tmp = (char**)malloc(sizeof(char*) * ft_strllen(envar) + 1);
-	while (i < ft_strllen(envar))
+	k = -1;
+	i = -1;
+	if(!(tmp = (char**)malloc(sizeof(char*) * ft_strllen(envar))))
+		return (NULL);
+	while (envar[++i])
 	{
 		if (i == j)
-			i++;
+			continue ;
 		if (envar[i] != NULL)
 		{
-			tmp[k] = ft_strdup(envar[i]);
+			tmp[++k] = ft_strdup(envar[i]);
 			envar[i] ? free(envar[i]) : (0);
 		}
-		else
-			tmp[k] = NULL;
-		i++;
-		k++;
 	}
 	free(envar);
+	tmp[++k] = NULL;
 	return (tmp);
 }
 
