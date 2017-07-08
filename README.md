@@ -25,4 +25,4 @@
 * signal, kill
 * exit
 
-![](https://github.com/alinacornea/minishell/Screenshot.png)
+![screenshot](Screenshot.png)
