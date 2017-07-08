@@ -24,3 +24,5 @@
 * wait, waitpid, wait3, wait4
 * signal, kill
 * exit
+
+![ScreenShot](https://github.com/alinacornea/minishell/Screenshot.png)
